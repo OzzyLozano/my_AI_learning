@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>red neuronal</title>
+</head>
+<body>
+	<input onInput="update(this.jscolor, '#hello')" value="CCFFAA" data-jscolor="{onInput:'redNeuronal(this.channels)'}">
+
+  <div id="hello" style="padding-top: 200px; font-size: 27px; text-align: center;" onInput="update(this.jscolor, '#hello')">
+    Mi Sitio Web uwu
+  </div>
+
+  <script src="jscolor.js"></script>
+  <script src="//unpkg.com/brain.js"></script>
+
+  <script>
+    function update(picker, selector) {
+		document.querySelector(selector).style.background = picker.toBackground()
+	  }
+
+    // triggers 'onInput' and 'onChange' on all color pickers when they are ready
+    jscolor.trigger('input change');
+  </script>
+
+  <script>
+    function redNeuronal(color) {
+      // inicializar red neuronal
+      var network = new brain.NeuralNetwork();
+  
+      // entrenarla
+      network.train([
+        {input: {rojo:0, verde:0, azul:0}, output: {color:1}},
+        {input: {rojo:1, verde:1, azul:1}, output: {color:0}}
+      ])
+
+      // tomar el fondo actual elegido para usarlo de entrada a nuestra red neuronal
+      var entrada = {
+        rojo: color.r / 255,
+        verde: color.g / 255,
+        azul: color.b / 255
+      }
+
+      // obtener la prediccion
+      var resultado = network.run(entrada)
+      console.log(resultado)
+
+      if (resultado.color > .5) hello.style.color = "white"
+      else hello.style.color = "black"
+    }
+  </script>
+
+  <script>
+    function getColor(color) {
+      console.log('r', color.r / 255);
+      console.log('g', color.g / 255);
+      console.log('b', color.b / 255);
+    }
+  </script>
+
+</body>
+</html>
